@@ -79,11 +79,13 @@ public class Words {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Words words = (Words) o;
-        return Objects.equals(originWord, words.originWord) && Objects.equals(resultWord, words.resultWord);
+        return Objects.equals(wordId, words.wordId) &&
+                Objects.equals(originWord, words.originWord) &&
+                Objects.equals(resultWord, words.resultWord);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(originWord, resultWord);
+        return Objects.hash(wordId, originWord, resultWord);
     }
 }

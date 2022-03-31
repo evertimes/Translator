@@ -1,13 +1,14 @@
 package com.evertimes.translator.model.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class YandexInput implements Serializable {
-    private String[] texts;
+    private List<String> texts;
     private String sourceLanguageCode;
     private String targetLanguageCode;
 
-    public YandexInput(String[] texts,
+    public YandexInput(List<String> texts,
                        String sourceLanguageCode,
                        String targetLanguageCode) {
         this.texts = texts;
@@ -15,27 +16,15 @@ public class YandexInput implements Serializable {
         this.targetLanguageCode = targetLanguageCode;
     }
 
-    public String[] getTexts() {
+    public List<String> getTexts() {
         return texts;
-    }
-
-    public void setTexts(String[] texts) {
-        this.texts = texts;
     }
 
     public String getTargetLanguageCode() {
         return targetLanguageCode;
     }
 
-    public void setTargetLanguageCode(String targetLanguageCode) {
-        this.targetLanguageCode = targetLanguageCode;
-    }
-
     public String getSourceLanguageCode() {
         return sourceLanguageCode;
-    }
-
-    public void setSourceLanguageCode(String sourceLanguageCode) {
-        this.sourceLanguageCode = sourceLanguageCode;
     }
 }

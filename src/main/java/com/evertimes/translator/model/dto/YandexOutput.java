@@ -9,19 +9,11 @@ public class YandexOutput implements Serializable {
         return translations;
     }
 
-    public void setTranslations(Translations[] translations) {
-        this.translations = translations;
-    }
-
     public static class Translations implements Serializable {
         private String text;
 
         public String getText() {
             return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
         }
     }
 }

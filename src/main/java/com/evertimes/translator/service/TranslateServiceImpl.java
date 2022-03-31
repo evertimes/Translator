@@ -36,8 +36,7 @@ public class TranslateServiceImpl implements TranslateService {
     public OutputData translate(InputData inputData) {
         List<String> words = tokenizer.split(inputData.getText());
         List<String> translatedWords = translateClient.translate(
-                words.toArray(new String[0]),
-                inputData.getSourceLanguageCode(),
+                words, inputData.getSourceLanguageCode(),
                 inputData.getTargetLanguageCode());
         String translatedString = tokenizer.concat(translatedWords);
         OutputData outputData = new OutputData(translatedString);

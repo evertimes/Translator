@@ -12,8 +12,4 @@ public class OutputData implements Serializable {
     public String getTranslatedString() {
         return translatedString;
     }
-
-    public void setTranslatedString(String translatedString) {
-        this.translatedString = translatedString;
-    }
 }

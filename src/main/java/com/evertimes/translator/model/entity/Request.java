@@ -21,19 +21,24 @@ public class Request {
 
     @Column(nullable = false)
     private String inputData;
+
     @Column(nullable = false)
     private String outputData;
+
     @Column(nullable = false)
     private LocalDateTime dateTime;
+
     @Column(nullable = false)
     private String sourceLanguageCode;
+
     @Column(nullable = false)
     private String targetLanguageCode;
 
     @Column(nullable = false)
     private String ip;
+
     @OneToMany(mappedBy = "request", cascade = {CascadeType.ALL})
-    private Set<Words> wordsInRequest = new HashSet();
+    private Set<Words> wordsInRequest = new HashSet<>();
 
     public Request() {
     }
