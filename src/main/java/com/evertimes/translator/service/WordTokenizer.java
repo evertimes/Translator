@@ -1,14 +1,17 @@
-package com.evertimes.translator.model;
+package com.evertimes.translator.service;
+
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Tokenizer {
-    public List<String> splitToWords(String input){
+@Service
+public class WordTokenizer {
+    public List<String> split(String input){
         return Arrays.asList(input.split(" "));
     }
 
-    public String concatToString(List<String> words){
+    public String concat(List<String> words){
         StringBuilder builder = new StringBuilder();
         for (String word : words){
             builder.append(word).append(" ");

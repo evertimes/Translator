@@ -1,6 +1,5 @@
 package com.evertimes.translator.service;
 
-import com.evertimes.translator.model.Tokenizer;
 import com.evertimes.translator.model.dto.InputData;
 import com.evertimes.translator.model.dto.OutputData;
 import com.evertimes.translator.service.interfaces.LogService;
@@ -17,40 +16,33 @@ public class TranslateServiceImpl implements TranslateService {
     private final TranslateClient translateClient;
     private final LogService logService;
     private final HttpServletRequest httpRequest;
+    private final WordTokenizer tokenizer;
+    private final IpService ipService;
 
     @Autowired
     TranslateServiceImpl(TranslateClient translateClient,
                          LogService logService,
-                         HttpServletRequest httpRequest) {
+                         HttpServletRequest httpRequest,
+                         WordTokenizer tokenizer,
+                         IpService ipService) {
         this.translateClient = translateClient;
         this.logService = logService;
         this.httpRequest = httpRequest;
+        this.tokenizer = tokenizer;
+        this.ipService = ipService;
     }
 
     @Override
     public OutputData translate(InputData inputData) {
-        Tokenizer tokenizer = new Tokenizer();
-        List<String> words = tokenizer.splitToWords(inputData.getText());
+        List<String> words = tokenizer.split(inputData.getText());
         List<String> translatedWords = translateClient.translate(
                 words.toArray(new String[0]),
                 inputData.getSourceLanguageCode(),
                 inputData.getTargetLanguageCode());
-        String translatedString = tokenizer.concatToString(translatedWords);
+        String translatedString = tokenizer.concat(translatedWords);
         OutputData outputData = new OutputData(translatedString);
         logService.log(inputData, outputData, words,
-                translatedWords, getIP(httpRequest));
+                translatedWords, ipService.getIP(httpRequest));
         return outputData;
     }
-
-    private String getIP(HttpServletRequest request) {
-        String remoteAddr = "";
-        if (request != null) {
-            remoteAddr = request.getHeader("X-FORWARDED-FOR");
-            if (remoteAddr == null || "".equals(remoteAddr)) {
-                remoteAddr = request.getRemoteAddr();
-            }
-        }
-        return remoteAddr;
-    }
-
 }

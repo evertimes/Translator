@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "translator.apiKey",
+      "type": "java.lang.String",
+      "description": "Description for yandex.apiKey."
+    },
+    {
+      "name": "translator.uri",
+      "type": "java.lang.String",
+      "description": "Description for yandex.uri."
+    }
+  ] }

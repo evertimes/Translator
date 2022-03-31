@@ -1,8 +1,8 @@
 package com.evertimes.translator.service;
 
-import com.evertimes.translator.model.database.Request;
-import com.evertimes.translator.model.database.RequestRepo;
-import com.evertimes.translator.model.database.Words;
+import com.evertimes.translator.model.entity.Request;
+import com.evertimes.translator.model.entity.RequestRepo;
+import com.evertimes.translator.model.entity.Words;
 import com.evertimes.translator.model.dto.InputData;
 import com.evertimes.translator.model.dto.OutputData;
 import com.evertimes.translator.service.interfaces.LogService;

@@ -1,5 +1,7 @@
 package com.evertimes.translator.service;
 
+import com.evertimes.translator.configuration.TranslatorConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -15,17 +17,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class YandexTranslateClient implements TranslateClient {
+    private final TranslatorConfiguration configuration;
+
+    @Autowired
+    public YandexTranslateClient(TranslatorConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
     public List<String> translate(String[] words,
                                   String sourceLanguageCode,
-                                  String targetLanguageCode){
+                                  String targetLanguageCode) {
         var header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_TYPE, "application/json");
-        header.add("Authorization","Api-Key AQVNx9UB8F04CLIMeCVlOFmX61JODPtchHUGtsPc");
-        YandexInput data = new YandexInput(words,sourceLanguageCode,targetLanguageCode);
+        header.add(HttpHeaders.AUTHORIZATION, configuration.getApiKey());
+        YandexInput data = new YandexInput(words, sourceLanguageCode,
+                targetLanguageCode);
         HttpEntity<YandexInput> entity = new HttpEntity(data, header);
         RestTemplate request = new RestTemplate();
-        Optional<YandexOutput> outData = Optional.ofNullable(request.postForObject("https://translate.api.cloud.yandex.net/translate/v2/translate", entity, YandexOutput.class));
+        YandexOutput output = request.postForObject(configuration.getUri(),
+                entity, YandexOutput.class);
+        Optional<YandexOutput> outData = Optional.ofNullable(output);
         return Arrays.stream(outData.orElseThrow().getTranslations())
-                .map(YandexOutput.Translations::getText).collect(Collectors.toList());
+                .map(YandexOutput.Translations::getText)
+                .collect(Collectors.toList());
     }
 }

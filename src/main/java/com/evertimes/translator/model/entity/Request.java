@@ -1,4 +1,4 @@
-package com.evertimes.translator.model.database;
+package com.evertimes.translator.model.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
