@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class WordTokenizer {
+public class WordTokenizerService {
     public List<String> split(String input) {
         return Arrays.asList(input.split(" "));
     }

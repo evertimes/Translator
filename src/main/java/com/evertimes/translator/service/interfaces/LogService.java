@@ -3,6 +3,7 @@ package com.evertimes.translator.service.interfaces;
 import com.evertimes.translator.model.dto.InputData;
 import com.evertimes.translator.model.dto.OutputData;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface LogService {
@@ -10,5 +11,5 @@ public interface LogService {
              OutputData output,
              List<String> originalWords,
              List<String> translatedWords,
-             String ip);
+             LocalDateTime dateTime);
 }

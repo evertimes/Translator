@@ -1,5 +1,8 @@
 package com.evertimes.translator.model.entity;
 
+import com.evertimes.translator.model.dto.InputData;
+import com.evertimes.translator.model.dto.OutputData;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +12,7 @@ import javax.persistence.OneToMany;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -43,14 +47,13 @@ public class Request {
     public Request() {
     }
 
-    public Request(String inputData, String outputData,
-                   LocalDateTime dateTime, String sourceLanguageCode,
-                   String targetLanguageCode, String ip) {
-        this.inputData = inputData;
-        this.outputData = outputData;
+    public Request(InputData inputData, OutputData outputData,
+                   LocalDateTime dateTime, String ip) {
+        this.inputData = inputData.getText();
+        this.outputData = outputData.getTranslatedString();
         this.dateTime = dateTime;
-        this.sourceLanguageCode = sourceLanguageCode;
-        this.targetLanguageCode = targetLanguageCode;
+        this.sourceLanguageCode = inputData.getSourceLanguageCode();
+        this.targetLanguageCode = inputData.getTargetLanguageCode();
         this.ip = ip;
     }
 
@@ -115,4 +118,17 @@ public class Request {
         this.ip = ip;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request request = (Request) o;
+        return Objects.equals(requestId, request.requestId) && Objects.equals(inputData, request.inputData) && Objects.equals(outputData, request.outputData) && Objects.equals(dateTime, request.dateTime) && Objects.equals(sourceLanguageCode, request.sourceLanguageCode) && Objects.equals(targetLanguageCode, request.targetLanguageCode) && Objects.equals(ip, request.ip) && Objects.equals(wordsInRequest, request.wordsInRequest);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestId, inputData, outputData, dateTime,
+                sourceLanguageCode, targetLanguageCode, ip, wordsInRequest);
+    }
 }

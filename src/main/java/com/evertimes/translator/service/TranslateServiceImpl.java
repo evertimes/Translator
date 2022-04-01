@@ -2,46 +2,53 @@ package com.evertimes.translator.service;
 
 import com.evertimes.translator.model.dto.InputData;
 import com.evertimes.translator.model.dto.OutputData;
+import com.evertimes.translator.model.dto.YandexInput;
+import com.evertimes.translator.model.dto.YandexOutput;
 import com.evertimes.translator.service.interfaces.LogService;
 import com.evertimes.translator.service.interfaces.TranslateClient;
 import com.evertimes.translator.service.interfaces.TranslateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
-import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class TranslateServiceImpl implements TranslateService {
     private final TranslateClient translateClient;
     private final LogService logService;
-    private final HttpServletRequest httpRequest;
-    private final WordTokenizer tokenizer;
-    private final IpService ipService;
+    private final WordTokenizerService tokenizer;
 
     @Autowired
     TranslateServiceImpl(TranslateClient translateClient,
                          LogService logService,
-                         HttpServletRequest httpRequest,
-                         WordTokenizer tokenizer,
-                         IpService ipService) {
+                         WordTokenizerService tokenizer) {
         this.translateClient = translateClient;
         this.logService = logService;
-        this.httpRequest = httpRequest;
         this.tokenizer = tokenizer;
-        this.ipService = ipService;
     }
 
     @Override
-    public OutputData translate(InputData inputData) {
+    public OutputData translate(InputData inputData)
+            throws HttpClientErrorException {
         List<String> words = tokenizer.split(inputData.getText());
-        List<String> translatedWords = translateClient.translate(
-                words, inputData.getSourceLanguageCode(),
+        YandexInput data = new YandexInput(words, inputData.getSourceLanguageCode(),
                 inputData.getTargetLanguageCode());
+        YandexOutput response = translateClient
+                .translate(data);
+        List<String> translatedWords = Objects
+                .requireNonNull(response)
+                .getTranslations().stream()
+                .map(YandexOutput.Translations::getText)
+                .collect(Collectors.toList());
         String translatedString = tokenizer.concat(translatedWords);
         OutputData outputData = new OutputData(translatedString);
         logService.log(inputData, outputData, words,
-                translatedWords, ipService.getIP(httpRequest));
+                translatedWords, LocalDateTime.now());
         return outputData;
+
     }
 }

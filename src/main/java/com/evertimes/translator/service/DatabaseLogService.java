@@ -15,10 +15,13 @@ import java.util.List;
 @Service
 public class DatabaseLogService implements LogService {
     private final RequestRepo requestRepo;
+    private final IpService ipService;
 
     @Autowired
-    public DatabaseLogService(RequestRepo requestRepo) {
+    public DatabaseLogService(RequestRepo requestRepo,
+                              IpService ipService) {
         this.requestRepo = requestRepo;
+        this.ipService = ipService;
     }
 
     @Override
@@ -26,17 +29,23 @@ public class DatabaseLogService implements LogService {
                     OutputData output,
                     List<String> originalWords,
                     List<String> translatedWords,
-                    String ip) {
-        Request requestEntity = new Request(input.getText(),
-                output.getTranslatedString(),
-                LocalDateTime.now(),
-                input.getSourceLanguageCode(),
-                input.getTargetLanguageCode(),
-                ip);
+                    LocalDateTime dateTime) {
+        Request requestEntity = constuctRequest(input, output, dateTime);
+        addWordsToRequest(requestEntity, originalWords, translatedWords);
+        requestRepo.save(requestEntity);
+    }
+
+    private Request constuctRequest(InputData input, OutputData output,
+                                    LocalDateTime dateTime) {
+        return new Request(input, output, dateTime, ipService.getCurrentIP());
+    }
+
+    private void addWordsToRequest(Request requestEntity,
+                                   List<String> originalWords,
+                                   List<String> translatedWords) {
         for (int i = 0; i < originalWords.size(); i++) {
             requestEntity.addWord(new Words(originalWords.get(i),
                     translatedWords.get(i)));
         }
-        requestRepo.save(requestEntity);
     }
 }

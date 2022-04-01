@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RestController;
 import com.evertimes.translator.model.dto.OutputData;
+import org.springframework.web.client.HttpClientErrorException;
 
 @RestController
 public class TranslateController {
     private final TranslateService translateService;
+
     @Autowired
     public TranslateController(TranslateService translateService) {
         this.translateService = translateService;
@@ -21,7 +23,11 @@ public class TranslateController {
 
     @PostMapping(value = "/translate")
     public ResponseEntity<OutputData> translate(@RequestBody InputData data) {
-        OutputData response = translateService.translate(data);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        try {
+            OutputData output = translateService.translate(data);
+            return new ResponseEntity<>(output, HttpStatus.OK);
+        } catch (HttpClientErrorException e) {
+            return new ResponseEntity<>(e.getStatusCode());
+        }
     }
 }

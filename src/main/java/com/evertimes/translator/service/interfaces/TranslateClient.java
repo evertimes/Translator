@@ -1,9 +1,8 @@
 package com.evertimes.translator.service.interfaces;
 
-import java.util.List;
+import com.evertimes.translator.model.dto.YandexInput;
+import com.evertimes.translator.model.dto.YandexOutput;
 
 public interface TranslateClient {
-    List<String> translate(List<String> words,
-                           String sourceLanguageCode,
-                           String targetLanguageCode);
+    YandexOutput translate(YandexInput input);
 }

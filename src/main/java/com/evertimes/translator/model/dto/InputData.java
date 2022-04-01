@@ -7,6 +7,14 @@ public class InputData implements Serializable {
     private String sourceLanguageCode;
     private String targetLanguageCode;
 
+
+    public InputData(String text, String sourceLanguageCode,
+                     String targetLanguageCode) {
+        this.text = text;
+        this.sourceLanguageCode = sourceLanguageCode;
+        this.targetLanguageCode = targetLanguageCode;
+    }
+
     public String getText() {
         return text;
     }
