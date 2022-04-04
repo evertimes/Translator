@@ -1,9 +1,7 @@
 package com.evertimes.translator.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 @ConfigurationProperties(prefix = "translator")
 public class TranslatorConfiguration {
     private String uri;
